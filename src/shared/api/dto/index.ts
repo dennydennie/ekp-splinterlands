@@ -8,3 +8,4 @@ export * from './player-collection.dto';
 export * from './player-battles.dto';
 export * from './settings.dto';
 export * from './transaction.dto';
+export * from './player-quest.dto'

@@ -30,10 +30,11 @@ export class PlannerController extends AbstractController {
     private apmService: ApmService,
     private gameService: MarketService,
     private plannerService: PlannerService,
+    
   ) {
     super(clientService);
   }
-
+  
   async onClientConnected(event: ClientConnectedEvent) {
     await this.clientService.emitMenu(event, {
       id: PATH,
@@ -63,6 +64,7 @@ export class PlannerController extends AbstractController {
           form,
           event.state.client.subscribed,
           event.state.client.selectedCurrency,
+      
         );
 
       await this.clientService.emitDocuments(
@@ -102,3 +104,5 @@ export class PlannerController extends AbstractController {
     // Do nothing
   }
 }
+
+

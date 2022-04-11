@@ -11,6 +11,7 @@ import {
 } from './dto';
 import { PlayerBattlesDto } from './dto/player-battles.dto';
 import { PlayerCollectionDto } from './dto/player-collection.dto';
+import { PlayerQuestDto } from './dto/player-quest.dto';
 
 const BASE_URL = 'https://api2.splinterlands.com';
 const STEEM_BASE_URL = 'https://api.steemmonsters.io';
@@ -111,6 +112,22 @@ export class ApiService extends AbstractApiService {
     return this.handleCall({ url }, async () => {
       const response = await axios.get(url, { proxy: this.proxy });
 
+      return response.data;
+    });
+  }
+  async fetchPlayerQuest(playerName: string): Promise<PlayerQuestDto> {
+    const url = `${BASE_URL}/players/quests?username=${playerName}`;
+    return this.handleCall({ url }, async () => {
+      const response = await axios.get(url, { proxy: this.proxy });
+      console.log(playerName);
+      return response.data;
+    });
+  }
+  async fetchPlayerOustandingMatch(playerName: string): Promise<PlayerQuestDto> {
+    const url = `${BASE_URL}/players/outstanding_match?username${playerName}`;
+    return this.handleCall({ url }, async () => {
+      const response = await axios.get(url, { proxy: this.proxy });
+      console.log(playerName);
       return response.data;
     });
   }

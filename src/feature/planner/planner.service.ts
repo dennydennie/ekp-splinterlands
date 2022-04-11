@@ -1,8 +1,9 @@
 import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { Injectable } from '@nestjs/common';
 import { validate } from 'bycontract';
-import _ from 'lodash';
+import _, { identity } from 'lodash';
 import moment from 'moment';
+import { ApiService, PlayerBattleDto, PlayerQuestDto } from '../../shared/api';
 import { IgnRepository } from '../../shared/db';
 import {
   CardService,
@@ -12,6 +13,7 @@ import {
 } from '../../shared/game';
 import { DEFAULT_PLANNER_FORM, PlannerForm } from '../../util';
 import { PlannerDocument } from './ui/planner.document';
+import { PlayerQuestDocument} from './ui/player-quest.document';
 
 @Injectable()
 export class PlannerService {
@@ -20,12 +22,15 @@ export class PlannerService {
     private ignRepository: IgnRepository,
     private marketService: MarketService,
     private resultsService: ResultsService,
+    private apiService: ApiService,
   ) {}
 
+   
   async getPlannerDocuments(
     form: PlannerForm,
     subscribed: boolean,
     currency: CurrencyDto,
+
   ) {
     validate([form, form.manaCap], ['object', 'number']);
 
@@ -49,12 +54,17 @@ export class PlannerService {
       delete cardPrices[card.hash];
     }
 
+    const quest = await this.apiService.fetchPlayerQuest(form.playerName);
+    console.log(quest);
+
     const plannerDocuments = await this.mapDocuments(
       teams,
       cardPrices,
       currency,
+  
     );
 
+  
     return { plannerDocuments, battles };
   }
 
@@ -64,7 +74,6 @@ export class PlannerService {
     currency: CurrencyDto,
   ): Promise<PlannerDocument[]> {
     const now = moment().unix();
-
     const conversionRate = await this.marketService.getConversionRate(
       'usd-coin',
       currency.id,
@@ -135,9 +144,13 @@ export class PlannerService {
           summonerEdition: team.summoner.edition,
           winpc: (team.wins * 100) / team.battles,
         };
+       
 
         return document;
       })
       .value();
   }
+
+  
+
 }
