@@ -1,6 +1,7 @@
 import { CurrencyDto } from '@earnkeeper/ekp-sdk';
 import { Injectable } from '@nestjs/common';
 import { validate } from 'bycontract';
+import { Console } from 'console';
 import _, { identity } from 'lodash';
 import moment from 'moment';
 import { ApiService, PlayerBattleDto, PlayerQuestDto } from '../../shared/api';
@@ -14,6 +15,7 @@ import {
 import { DEFAULT_PLANNER_FORM, PlannerForm } from '../../util';
 import { PlannerDocument } from './ui/planner.document';
 import { PlayerQuestDocument} from './ui/player-quest.document';
+import { OustandingMatchDocument } from './ui/oustanding-match.document';
 
 @Injectable()
 export class PlannerService {
@@ -56,6 +58,9 @@ export class PlannerService {
 
     const quest = await this.apiService.fetchPlayerQuest(form.playerName);
     console.log(quest);
+
+    const oustandingMatch = await this.apiService.fetchPlayerOustandingMatch(form.playerName);
+    console.log(oustandingMatch);
 
     const plannerDocuments = await this.mapDocuments(
       teams,

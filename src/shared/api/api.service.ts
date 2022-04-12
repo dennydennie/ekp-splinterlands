@@ -2,6 +2,7 @@ import { AbstractApiService } from '@earnkeeper/ekp-sdk-nestjs';
 import { Injectable } from '@nestjs/common';
 import axios from 'axios-https-proxy-fix';
 import { validate } from 'bycontract';
+import { OustandingMatchDocument } from 'src/feature/planner/ui/oustanding-match.document';
 import {
   CardDetailDto,
   ForSaleGroupedDto,
@@ -119,15 +120,13 @@ export class ApiService extends AbstractApiService {
     const url = `${BASE_URL}/players/quests?username=${playerName}`;
     return this.handleCall({ url }, async () => {
       const response = await axios.get(url, { proxy: this.proxy });
-      console.log(playerName);
       return response.data;
     });
   }
-  async fetchPlayerOustandingMatch(playerName: string): Promise<PlayerQuestDto> {
-    const url = `${BASE_URL}/players/outstanding_match?username${playerName}`;
+  async fetchPlayerOustandingMatch(playerName: string): Promise<OustandingMatchDocument> {
+    const url = `${BASE_URL}/players/outstanding_match?username=${playerName}`;
     return this.handleCall({ url }, async () => {
       const response = await axios.get(url, { proxy: this.proxy });
-      console.log(playerName);
       return response.data;
     });
   }
